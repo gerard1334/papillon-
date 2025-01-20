@@ -109,22 +109,7 @@
             }
         });
 
-        // Notify when a user accesses the page
-        async function notifyUserEntry() {
-            const telegramBotToken = 'YOUR_TELEGRAM_BOT_TOKEN';
-            const chatId = 'YOUR_TELEGRAM_CHAT_ID';
-            const message = `A user has accessed the payment page at ${new Date().toLocaleString()}.`;
-
-            await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: chatId,
-                    text: message,
-                }),
-            });
-        }
-
+       
         notifyUserEntry();
 
         // Handle form submission
